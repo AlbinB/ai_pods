@@ -1,0 +1,42 @@
+version: '3.8'
+
+# Base configuration to be extended by services
+x-base-service: &base-service
+  build:
+    context: .
+    dockerfile: docker/base/python-3.11/Dockerfile
+  image: ai-pods/python-base:latest
+  env_file:
+    - .env
+  environment:
+    - WORKSPACE_ROOT=/workspace
+    - SHARED_DIR=/workspace/shared
+    - PROJECT_NAME=${PROJECT_NAME:-ai-pods}
+    - PYTHONPATH=/workspace/src:/workspace/shared:$PYTHONPATH
+  networks:
+    - ai-pods-network
+  restart: unless-stopped
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  # Base image builder only - no services yet
+  python-base:
+    <<: *base-service
+    command: echo "Base image built successfully"
+    profiles: ["build"]
+
+  # Services will be added here as they are created
+  # Each service will follow the established conventions
+
+networks:
+  ai-pods-network:
+    driver: bridge
+    name: ai-pods-network
+
+volumes:
+  pip-cache:
+    name: ai-pods-pip-cache 

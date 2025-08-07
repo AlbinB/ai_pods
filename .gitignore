@@ -1,0 +1,45 @@
+# Environment
+.env
+*.env.local
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venvs/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+
+# Docker
+*.log
+docker/compose/override.yml
+
+# Data (but keep structure)
+shared/data/*
+!shared/data/.gitkeep
+shared/models/*
+!shared/models/.gitkeep
+shared/outputs/*/*
+!shared/outputs/*/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini 

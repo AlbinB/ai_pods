@@ -1,0 +1,54 @@
+# ===========================================
+# Base Python Image for AI-Pods
+# Mode: Development (with prod notes)
+# Python: 3.11-slim
+# GPU: Auto-detect with CPU fallback
+# ===========================================
+
+FROM python:3.11-slim
+
+# --- SYSTEM DEPENDENCIES ---
+RUN apt-get update && apt-get install -y \
+    curl \
+    vim \
+    nano \
+    htop \
+    git \
+    build-essential \
+    # PROD: Comment out above tools except build-essential
+    && rm -rf /var/lib/apt/lists/*
+
+# --- GPU SUPPORT PREPARATION ---
+# Note: Full GPU setup will be added when first GPU-enabled service is created
+# This base image remains CPU-only but GPU-ready
+
+# --- PYTHON BASE PACKAGES ---
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# --- DEVELOPMENT TOOLS ---
+# PROD: Remove this entire section
+RUN pip install --no-cache-dir \
+    debugpy \
+    ipython \
+    jupyter \
+    jupyterlab \
+    notebook \
+    black \
+    flake8 \
+    pytest \
+    pytest-cov
+
+# --- ENVIRONMENT CONFIGURATION ---
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    JUPYTER_ENABLE_LAB=yes \
+    # PROD: Add PYTHONOPTIMIZE=2
+    WORKSPACE_ROOT=/workspace
+
+# --- WORKING DIRECTORY ---
+WORKDIR /workspace
+
+# --- DEFAULT COMMAND ---
+# Development: Interactive shell
+CMD ["/bin/bash"]
+# PROD: Replace with specific service command 
